@@ -51,7 +51,7 @@ apscheduler==3.10.4
 # WebSockets (built-in with FastAPI/uvicorn)
 
 # Utilities
-python-dotenv==1.2.2
+python-dotenv==1.2.4
 structlog==24.4.0
 orjson==3.11.6
 python-dateutil==2.9.0
