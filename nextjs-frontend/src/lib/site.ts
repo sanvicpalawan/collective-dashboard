@@ -3,9 +3,9 @@
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://ffinn.ca').replace(/\/$/, '')
 export const GITHUB_URL = 'https://github.com/bplogan/ffinn'
 
-export const SITE_NAME = 'ffinn'
-export const SITE_TITLE = 'ffinn — Free, open-source AI SaaS framework'
-export const SITE_TAGLINE = 'The free, open-source SaaS framework with built-in AI agents'
+export const SITE_NAME = 'MerQato Digital'
+export const SITE_TITLE = 'MerQato Digital — AI Agency OS'
+export const SITE_TAGLINE = 'White-label AI Agency OS for digital agencies and local businesses'
 export const SITE_DESCRIPTION =
   'ffinn is a free, MIT-licensed, multi-tenant SaaS framework built on FastAPI and Next.js. ' +
   'Auth, roles, billing and admin out of the box, plus AI agents that write features, open pull ' +

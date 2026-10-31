@@ -18,13 +18,13 @@ services:
   api:
     build: ./python-backend
     ports:
-      - "8000:8000"
+      - "8005:8000"
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:localpass@db:5432/ffinn
       JWT_SECRET_KEY: local-dev-secret-key-change-in-production-32chars
       ENCRYPTION_KEY: dGVzdC1lbmNyeXB0aW9uLWtleS0zMmJ5dGJ5dGU=
-      APP_URL: http://localhost:3000
-      CORS_ORIGINS_RAW: http://localhost:3000
+      APP_URL: http://localhost:3005
+      CORS_ORIGINS_RAW: http://localhost:3005
       ENVIRONMENT: development
       DEFAULT_ADMIN_EMAIL: admin@localhost
       DEFAULT_ADMIN_PASSWORD: ChangeMe123!
@@ -40,9 +40,9 @@ services:
     build:
       context: ./nextjs-frontend
       args:
-        NEXT_PUBLIC_API_URL: http://localhost:8000
+        NEXT_PUBLIC_API_URL: http://localhost:8005
     ports:
-      - "3000:3000"
+      - "3005:3000"
     depends_on:
       - api
 
