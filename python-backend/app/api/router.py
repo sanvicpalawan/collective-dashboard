@@ -73,4 +73,7 @@ api_router.include_router(notifications_router)
 from app.api.projects import router as projects_router  # noqa: E402
 api_router.include_router(projects_router)
 
+from app.api.leads import router as leads_router  # noqa: E402
+api_router.include_router(leads_router)
+
 # (new feature routers are appended here by the AI agent merge helper)

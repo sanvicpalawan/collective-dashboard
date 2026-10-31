@@ -25,6 +25,7 @@ from app.domain.models.cloud_setup import (
 )
 from app.domain.models.notifications import NotificationConfiguration
 from app.domain.models.agent_job import AgentJob
+from app.domain.models.lead import Lead
 
 # AI-generated model imports — DO NOT REMOVE THIS COMMENT
 from app.domain.models.projects import ProjectStatus
@@ -46,5 +47,6 @@ __all__ = [
     "CloudSetupProgress", "CloudProviderCredentials", "GitHubIntegration",
     "NotificationConfiguration",
     "AgentJob",
+    "Lead",
     "ProjectStatus",
 ]

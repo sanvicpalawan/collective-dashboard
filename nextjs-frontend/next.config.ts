@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
     return [
       // The homepage lives at /; keep old /home links and bookmarks working.
       { source: '/home', destination: '/', permanent: true },
+      // The product lives under /app. Keep /dashboard/… links working.
+      { source: '/dashboard', destination: '/app/dashboard', permanent: false },
+      { source: '/dashboard/:path*', destination: '/app/:path*', permanent: false },
       // Marketing pages are retired — the product is the app.
       { source: '/docs', destination: '/auth/login', permanent: false },
       { source: '/docs/:path*', destination: '/auth/login', permanent: false },

@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, Shield, Building2, Settings, FileText, CreditCard,
   Bot, Zap, History, Globe, GitBranch, Cloud, ChevronDown,
-  LogOut, Sparkles, Mail, KeyRound, X, Play, Layers, MessageSquare,
+  LogOut, Sparkles, Mail, KeyRound, X, Play, Layers, MessageSquare, Target,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useEffect, useState } from 'react'
@@ -34,6 +34,10 @@ const AI_AGENT_NAV: NavItem = {
 }
 
 // AI-generated tenant feature nav items — DO NOT REMOVE THIS COMMENT
+// First sellable tool. Shown to host admins working in their own workspace and
+// to every tenant user — the leads themselves are tenant-scoped by the API.
+const LEADS_NAV: NavItem = { label: 'Leads', href: '/app/leads', icon: <Target size={18} /> }
+
 const FEATURE_NAV: NavItem[] = [
   { label: 'Projects', href: '/app/features/projects', icon: <LayoutDashboard size={18} /> },
 ]
@@ -45,6 +49,7 @@ const HOST_FEATURE_NAV: NavItem[] = []
 // names a permission so host-level sign-ups only see what they were granted.
 const HOST_NAV: NavItem[] = [
   { label: 'Dashboard',  href: '/app/dashboard', icon: <LayoutDashboard size={18} /> },
+  LEADS_NAV,
   ...HOST_FEATURE_NAV,
   { label: 'Tenants',    href: '/app/admin/tenants', icon: <Building2 size={18} />, permission: 'Tenant.Manage' },
   {
@@ -73,6 +78,7 @@ const HOST_NAV: NavItem[] = [
 // Navigation for TENANT users (admins and regular users)
 const TENANT_NAV: NavItem[] = [
   { label: 'Dashboard', href: '/app/dashboard', icon: <LayoutDashboard size={18} /> },
+  LEADS_NAV,
   ...FEATURE_NAV,
   {
     label: 'Administration', icon: <Shield size={18} />,
@@ -190,8 +196,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       >
         {/* Logo */}
         <div className="flex items-center justify-between h-16 px-5">
-          <Link href="/app/dashboard" onClick={onClose} aria-label="Palawan Collective dashboard" className="flex items-center gap-2.5">
-            <Logo />
+          <Link href="/app/dashboard" onClick={onClose} aria-label="MerQato Digital dashboard" className="flex items-center gap-2.5">
+            <Logo compact />
             {isHost && hasRole('Admin') && (
               <span className="rounded-full px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-ink-mute ring-1 ring-ink/15">Host</span>
             )}
