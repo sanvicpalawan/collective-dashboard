@@ -190,7 +190,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       >
         {/* Logo */}
         <div className="flex items-center justify-between h-16 px-5">
-          <Link href="/app/dashboard" onClick={onClose} aria-label="ffinn dashboard" className="flex items-center gap-2.5">
+          <Link href="/app/dashboard" onClick={onClose} aria-label="Palawan Collective dashboard" className="flex items-center gap-2.5">
             <Logo />
             {isHost && hasRole('Admin') && (
               <span className="rounded-full px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-ink-mute ring-1 ring-ink/15">Host</span>

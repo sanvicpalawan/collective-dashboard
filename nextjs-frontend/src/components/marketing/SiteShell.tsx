@@ -45,7 +45,7 @@ function SiteFooter() {
       <div className="site-container pt-16 pb-10">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="max-w-xs">
-            <Link href="/" aria-label="ffinn home"><Logo /></Link>
+            <Link href="/" aria-label="Palawan Collective home"><Logo /></Link>
             <p className="mt-4 text-sm leading-relaxed text-ink-mute">
               The free, open-source foundation for business software, with an AI agent that builds what you describe.
             </p>
@@ -69,18 +69,18 @@ function SiteFooter() {
           <div>
             <h2 className="site-eyebrow">Contact</h2>
             <ul className="mt-4 space-y-2.5">
-              <li><a href="mailto:info@ffinn.ca" className="text-sm text-ink-soft transition-colors hover:text-ink">info@ffinn.ca</a></li>
+              <li><a href="mailto:hello@palawancollective.com" className="text-sm text-ink-soft transition-colors hover:text-ink">hello@palawancollective.com</a></li>
             </ul>
           </div>
         </div>
         <div className="mt-16 flex flex-col gap-3 border-t pt-6 text-[13px] text-ink-mute sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} ffinn contributors. Free and open source under the MIT License.</p>
+          <p>© {new Date().getFullYear()} Palawan Collective. All rights reserved.</p>
           <p className="font-mono text-[12px]">FastAPI · Next.js · PostgreSQL</p>
         </div>
       </div>
       {/* Oversized wordmark, clipped by the footer edge */}
       <div aria-hidden className="pointer-events-none select-none site-container translate-y-[22%]">
-        <div className="font-display text-[clamp(6rem,26vw,22rem)] font-semibold leading-[0.8] tracking-[-0.07em] text-ink/[0.06]">ffinn</div>
+        <div className="font-display text-[clamp(6rem,26vw,22rem)] font-semibold leading-[0.8] tracking-[-0.07em] text-ink/[0.06]">Palawan Collective</div>
       </div>
     </footer>
   )

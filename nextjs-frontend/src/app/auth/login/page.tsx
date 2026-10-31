@@ -190,7 +190,7 @@ function LoginPageContent() {
       <AuthHeading
         eyebrow="Sign in"
         title={<>Welcome <span className="site-serif">back</span></>}
-        lede="Sign in to your ffinn workspace."
+        lede="Sign in to your workspace."
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
@@ -284,7 +284,7 @@ function LoginPageContent() {
 
       {registrationAllowed && (
         <p className="mt-8 text-[14px] text-ink-mute">
-          New to ffinn?{' '}
+          New here?{' '}
           <Link href="/auth/register" className={authLink}>Create an account</Link>
         </p>
       )}

@@ -1,13 +1,13 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'ffinn — describe what your business needs, ffinn ships it. Free, open-source SaaS foundation with an AI build agent.'
+export const alt = 'Palawan Collective — AI Agency OS for digital agencies and local businesses.'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 const ink = '#0c0d10'
 const paper = '#f7f6f2'
-const accent = '#3641f5'
+const accent = '#91a0ff'
 const mute = '#686c77'
 
 const steps = ['Read', 'Plan', 'Write', 'Check', 'Pull request', 'Staging']
@@ -31,8 +31,8 @@ export default async function Image() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', fontSize: '40px', fontWeight: 700, letterSpacing: '-2px' }}>ffinn</div>
-          <div style={{ display: 'flex', fontSize: '20px', color: mute, letterSpacing: '1px' }}>FREE · OPEN SOURCE · MIT</div>
+          <div style={{ display: 'flex', fontSize: '40px', fontWeight: 700, letterSpacing: '-2px' }}>Palawan Collective</div>
+          <div style={{ display: 'flex', fontSize: '20px', color: mute, letterSpacing: '1px' }}>AI AGENCY OS · WHITE LABEL</div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>

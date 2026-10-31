@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
   },
   icons: {
-    icon: [{ url: '/favicon.ico' }, { url: '/ffinn-icon.svg', type: 'image/svg+xml' }],
+    icon: [{ url: '/favicon.ico' }, { url: '/brand/icon.png', type: 'image/png' }],
   },
   openGraph: {
     type: 'website',

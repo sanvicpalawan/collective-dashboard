@@ -25,7 +25,7 @@ export default function AuthShell({ children, wide = false }: { children: React.
       <div className={wide ? '' : 'lg:grid lg:min-h-screen lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]'}>
         <div className="flex min-h-screen flex-col">
           <header className={`flex h-16 items-center justify-between gap-4 ${wide ? 'site-container' : 'px-5 sm:px-8'}`}>
-            <Link href="/" aria-label="ffinn home"><Logo /></Link>
+            <Link href="/" aria-label="Palawan Collective home"><Logo /></Link>
             <div className="flex items-center gap-1">
               <Link href="/" className="hidden items-center gap-1.5 rounded-full px-3.5 py-2 text-[14px] text-ink-soft transition-colors hover:text-ink sm:inline-flex">
                 <ArrowLeft size={14} aria-hidden /> Back to site
@@ -39,11 +39,11 @@ export default function AuthShell({ children, wide = false }: { children: React.
           </main>
 
           <footer className={`flex flex-wrap items-center justify-between gap-3 pb-6 text-[12.5px] text-ink-mute ${wide ? 'site-container' : 'px-5 sm:px-8'}`}>
-            <p>© {new Date().getFullYear()} ffinn contributors · MIT License</p>
+            <p>© {new Date().getFullYear()} Palawan Collective · All rights reserved</p>
             <nav aria-label="Help" className="flex gap-4">
               <Link href="/docs" className="transition-colors hover:text-ink">Docs</Link>
               <Link href="/how-it-works" className="transition-colors hover:text-ink">How it works</Link>
-              <a href="mailto:info@ffinn.ca" className="transition-colors hover:text-ink">Contact</a>
+              <a href="mailto:hello@palawancollective.com" className="transition-colors hover:text-ink">Contact</a>
             </nav>
           </footer>
         </div>
@@ -80,7 +80,7 @@ function ProductPanel() {
           <div>
             <p className="site-eyebrow"><span className="h-px w-6 bg-ink/30" />Describe · review · ship</p>
             <p className="mt-6 max-w-md font-display text-[clamp(2rem,3vw,2.75rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-balance">
-              Describe what your business needs. <span className="site-serif text-accent">ffinn&nbsp;ships&nbsp;it.</span>
+              Describe what your business needs. <span className="site-serif text-accent">we&nbsp;ship&nbsp;it.</span>
             </p>
           </div>
 

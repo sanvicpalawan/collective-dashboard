@@ -44,7 +44,7 @@ export default function SiteNav({ active }: { active?: 'home' | 'how' | 'docs' }
       }`}
     >
       <div className="site-container flex h-16 items-center justify-between gap-6">
-        <Link href="/" aria-label="ffinn home" className="shrink-0"><Logo /></Link>
+        <Link href="/" aria-label="Palawan Collective home" className="shrink-0"><Logo /></Link>
 
         <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-1">
