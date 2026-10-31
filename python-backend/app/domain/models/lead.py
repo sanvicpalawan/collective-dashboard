@@ -35,6 +35,7 @@ class Lead(Base):
     business_name: Mapped[str] = mapped_column(String(256), nullable=False)
     email: Mapped[Optional[str]] = mapped_column(String(320), nullable=True)
     phone: Mapped[Optional[str]] = mapped_column(String(40), nullable=True)
+    website: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
     # new | contacted | qualified | won | lost
     status: Mapped[str] = mapped_column(

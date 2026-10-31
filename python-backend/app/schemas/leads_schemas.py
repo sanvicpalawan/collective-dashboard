@@ -26,6 +26,7 @@ class LeadRead(BaseModel):
     business_name: str
     email: Optional[str] = None
     phone: Optional[str] = None
+    website: Optional[str] = None
     status: str
     niche: Optional[str] = None
     location: Optional[str] = None

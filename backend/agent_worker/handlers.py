@@ -15,9 +15,8 @@ Rules:
 """
 from __future__ import annotations
 
-import hashlib
+import asyncio
 import platform
-import re
 import uuid
 from datetime import datetime, timezone
 from typing import Any, Awaitable, Callable
@@ -25,9 +24,14 @@ from typing import Any, Awaitable, Callable
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from scraper import find_leads
+
 Handler = Callable[[AsyncSession, dict], Awaitable[Any]]
 
 HANDLERS: dict[str, Handler] = {}
+
+# How many real businesses one search may return.
+LEAD_RESULT_LIMIT = 10
 
 
 def handler(job_type: str) -> Callable[[Handler], Handler]:
@@ -55,64 +59,29 @@ async def ping(_db: AsyncSession, job: dict) -> dict:
 
 
 # ── Lead generation ──────────────────────────────────────────────────────────
-# The real tool will call an outbound source (Maps/Places style API, directory
-# scrape). Until that integration exists, the handler produces a deterministic
-# mock set so the whole pipeline — queue, worker, table, UI — is exercised and
-# every run is reproducible and obviously synthetic (`.example.com` addresses).
-MOCK_PREFIXES = ("Bayview", "Harbour", "Sunset", "Coral", "Highland")
-MOCK_LEAD_COUNT = 5
-
-
-def _singular(word: str) -> str:
-    """Crude singulariser so 'dentists' → 'Dentist' in a business name."""
-    w = word.strip()
-    low = w.lower()
-    if low.endswith("ies") and len(w) > 4:
-        return w[:-3] + "y"
-    if low.endswith(("ss", "ses", "us", "is")):
-        return w
-    if low.endswith("s") and len(w) > 3:
-        return w[:-1]
-    return w
-
-
-def _digits(seed: str, count: int) -> str:
-    """Deterministic pseudo-random digits, so a rerun yields the same phone."""
-    digest = hashlib.sha256(seed.encode("utf-8")).hexdigest()
-    return "".join(c for c in digest if c.isdigit())[:count].ljust(count, "7")
-
-
-def build_mock_leads(niche: str, location: str, count: int = MOCK_LEAD_COUNT) -> list[dict]:
-    noun = _singular(niche).title()
-    leads: list[dict] = []
-    for i in range(count):
-        name = f"{MOCK_PREFIXES[i % len(MOCK_PREFIXES)]} {noun} {location}"
-        slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
-        d = _digits(f"{niche.lower()}|{location.lower()}|{i}", 9)
-        leads.append(
-            {
-                "business_name": name[:256],
-                # Reserved documentation domain — these addresses never exist.
-                "email": f"hello@{slug[:180]}.example.com",
-                "phone": f"+63 9{d[0]}{d[1]} {d[2]}{d[3]}{d[4]} {d[5]}{d[6]}{d[7]}{d[8]}",
-            }
-        )
-    return leads
-
-
+# Real data, two free sources: OpenStreetMap (Nominatim + Overpass) for
+# structured business records, DuckDuckGo HTML to find each business's own
+# website and read a `mailto:` out of it. See scraper.py for the why and the
+# request budget.
 INSERT_LEAD_SQL = text(
     """
     INSERT INTO leads (
-        id, tenant_id, business_name, email, phone, status, niche, location, source, job_id
+        id, tenant_id, business_name, email, phone, website, status,
+        niche, location, source, job_id
     )
     SELECT
-        :id, :tenant_id, :business_name, :email, :phone, 'new', :niche, :location, :source, :job_id
+        :id, :tenant_id, :business_name, :email, :phone, :website, 'new',
+        :niche, :location, :source, :job_id
     WHERE NOT EXISTS (
-        -- NULL tenant_id (host workspace) never conflicts in a unique index, so
-        -- the dedupe is explicit. IS NOT DISTINCT FROM covers both cases.
+        -- Re-running a search must not duplicate rows. NULL tenant_id (host
+        -- workspace) never conflicts in a unique index, and phone-only leads
+        -- have a NULL email, so the dedupe is explicit.
         SELECT 1 FROM leads
         WHERE tenant_id IS NOT DISTINCT FROM :tenant_id
-          AND email = CAST(:email AS varchar(320))
+          AND (
+            (email IS NOT NULL AND email = CAST(:email AS varchar(320)))
+            OR business_name = CAST(:business_name AS varchar(256))
+          )
     )
     ON CONFLICT (tenant_id, email) DO NOTHING
     RETURNING id
@@ -123,11 +92,11 @@ INSERT_LEAD_SQL = text(
 @handler("lead_generation")
 async def lead_generation(db: AsyncSession, job: dict) -> dict:
     """
-    Find businesses for `{"niche": "...", "location": "..."}` and store them.
+    Find real businesses for `{"niche": "...", "location": "..."}` and store them.
 
-    The results land in `leads`, scoped to the job's tenant, so the dashboard can
-    list them. Re-running the same search is safe: duplicates are skipped rather
-    than inserted twice.
+    Results land in `leads`, scoped to the job's tenant. A search that finds
+    nothing is not an error: it completes with `created: 0` and notes explaining
+    which sources were tried.
     """
     # None is the host workspace (a platform admin with no tenant); it is still a
     # scope of its own — no tenant user can ever read those rows.
@@ -139,37 +108,50 @@ async def lead_generation(db: AsyncSession, job: dict) -> dict:
     if not niche or not location:
         raise ValueError("payload must include non-empty 'niche' and 'location'")
 
-    found = build_mock_leads(niche, location)
+    # Scraping is blocking I/O (requests); keep it off the worker's event loop.
+    report = await asyncio.to_thread(find_leads, niche, location, LEAD_RESULT_LIMIT)
 
     created: list[dict] = []
-    for lead in found:
+    for lead in report.leads:
         row = await db.execute(
             INSERT_LEAD_SQL,
             {
                 "id": uuid.uuid4(),
                 "tenant_id": tenant_id,
-                "business_name": lead["business_name"],
-                "email": lead["email"],
-                "phone": lead["phone"],
+                "business_name": lead.business_name[:256],
+                "email": lead.email,
+                "phone": lead.phone,
+                "website": lead.website,
                 "niche": niche,
                 "location": location,
-                "source": "mock",
+                "source": lead.source,
                 "job_id": job["id"],
             },
         )
         new_id = row.scalar()
         if new_id is not None:
-            created.append({"id": str(new_id), **lead})
+            created.append(
+                {
+                    "id": str(new_id),
+                    "business_name": lead.business_name,
+                    "email": lead.email,
+                    "phone": lead.phone,
+                    "website": lead.website,
+                    "source": lead.source,
+                }
+            )
 
     await db.commit()
 
     return {
-        "mock": True,
+        "mock": False,
         "niche": niche,
         "location": location,
-        "requested": len(found),
+        "requested": LEAD_RESULT_LIMIT,
+        "found": len(report.leads),
         "created": len(created),
-        "skipped": len(found) - len(created),
+        "skipped": len(report.leads) - len(created),
+        "notes": report.notes,
         "leads": created,
     }
 

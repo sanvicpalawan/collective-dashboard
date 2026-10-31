@@ -15,6 +15,7 @@ interface Lead {
   businessName: string
   email?: string | null
   phone?: string | null
+  website?: string | null
   status: string
   niche?: string | null
   location?: string | null
@@ -25,7 +26,7 @@ interface Lead {
 interface LeadJob {
   id: string
   status: string
-  result?: { created?: number; requested?: number; skipped?: number } | null
+  result?: { created?: number; found?: number; requested?: number; skipped?: number; notes?: string[] } | null
   error?: string | null
   createdAt?: string | null
   completedAt?: string | null
@@ -39,9 +40,9 @@ const STATUS_VARIANT: Record<string, BadgeVariant> = {
   lost: 'gray',
 }
 
-/** Poll a queued job until the worker finishes it. */
-const POLL_INTERVAL_MS = 1500
-const POLL_MAX_ATTEMPTS = 40 // ~60s
+/** Poll a queued job until the worker finishes it. A real scrape takes ~30-90s. */
+const POLL_INTERVAL_MS = 2000
+const POLL_MAX_ATTEMPTS = 60 // ~2 min
 
 export default function LeadsPage() {
   const qc = useQueryClient()
@@ -154,7 +155,8 @@ export default function LeadsPage() {
         </form>
 
         <p className="mt-3 text-xs text-ink-mute">
-          The worker runs this in the background. Results below refresh when it finishes.
+          Live search across OpenStreetMap and the open web. The worker runs it in the
+          background — results appear below when it finishes (usually under a minute).
         </p>
 
         {job && (
@@ -166,6 +168,13 @@ export default function LeadsPage() {
             {job.result && <span>{job.result.created ?? 0} leads saved</span>}
             {job.error && <span className="text-error-600 dark:text-error-400">{job.error}</span>}
           </div>
+        )}
+        {job?.result?.notes && job.result.notes.length > 0 && (
+          <ul className="mt-2 space-y-1 text-xs text-ink-mute">
+            {job.result.notes.map((note, i) => (
+              <li key={i}>• {note}</li>
+            ))}
+          </ul>
         )}
       </section>
 
@@ -213,6 +222,16 @@ export default function LeadsPage() {
                         <span className="mt-0.5 block text-xs text-ink-mute">
                           {[lead.niche, lead.location].filter(Boolean).join(' · ')}
                         </span>
+                      )}
+                      {lead.website && (
+                        <a
+                          href={lead.website}
+                          target="_blank"
+                          rel="noopener noreferrer nofollow"
+                          className="mt-0.5 block max-w-[260px] truncate text-xs text-ink-mute hover:text-accent"
+                        >
+                          {lead.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                        </a>
                       )}
                     </td>
                     <td className="px-5 py-3.5">
