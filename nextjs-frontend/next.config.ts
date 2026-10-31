@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
     return [
       // The homepage lives at /; keep old /home links and bookmarks working.
       { source: '/home', destination: '/', permanent: true },
+      // Marketing pages are retired — the product is the app.
+      { source: '/docs', destination: '/auth/login', permanent: false },
+      { source: '/docs/:path*', destination: '/auth/login', permanent: false },
+      { source: '/how-it-works', destination: '/auth/login', permanent: false },
       // Canonicalise to bare domain — www → ffinn.ca (permanent 301)
       {
         source: '/:path*',

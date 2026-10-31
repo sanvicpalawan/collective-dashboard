@@ -8,11 +8,7 @@ import { Logo } from './Logo'
 import ThemeToggle from './ThemeToggle'
 
 const links = [
-  { label: 'How it works', href: '/how-it-works', key: 'how' },
-  { label: 'Features', href: '/#foundation', key: 'features' },
-  { label: 'Guardrails', href: '/#guardrails', key: 'guardrails' },
-  { label: 'Docs', href: '/docs', key: 'docs' },
-  { label: 'FAQ', href: '/#faq', key: 'faq' },
+  { label: 'Sign in', href: '/auth/login', key: 'docs' },
 ] as const
 
 export default function SiteNav({ active }: { active?: 'home' | 'how' | 'docs' }) {

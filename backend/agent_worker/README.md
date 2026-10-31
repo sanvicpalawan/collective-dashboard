@@ -6,20 +6,20 @@ worker writes back `status`, `result` or `error`.
 
 ## Run
 
+As a compose service (recommended, `restart: unless-stopped`):
+
+```bash
+docker compose up -d --build agent-worker
+docker compose logs -f agent-worker
+```
+
+Locally, against the Docker database:
+
 ```bash
 cd backend/agent_worker
 pip install -r requirements.txt
 export DATABASE_URL="postgresql+asyncpg://postgres:localpass@localhost:5433/ffinn"
 python worker.py
-```
-
-Against the Docker stack, run it inside the API container so it shares the
-database network:
-
-```bash
-docker compose cp backend/agent_worker api:/tmp/agent_worker
-docker compose exec -e DATABASE_URL="postgresql+asyncpg://postgres:localpass@db:5432/ffinn" \
-  api sh -c "cd /tmp/agent_worker && python worker.py"
 ```
 
 ## Configuration

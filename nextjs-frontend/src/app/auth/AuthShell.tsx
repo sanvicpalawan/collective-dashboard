@@ -41,8 +41,6 @@ export default function AuthShell({ children, wide = false }: { children: React.
           <footer className={`flex flex-wrap items-center justify-between gap-3 pb-6 text-[12.5px] text-ink-mute ${wide ? 'site-container' : 'px-5 sm:px-8'}`}>
             <p>© {new Date().getFullYear()} Palawan Collective · All rights reserved</p>
             <nav aria-label="Help" className="flex gap-4">
-              <Link href="/docs" className="transition-colors hover:text-ink">Docs</Link>
-              <Link href="/how-it-works" className="transition-colors hover:text-ink">How it works</Link>
               <a href="mailto:hello@palawancollective.com" className="transition-colors hover:text-ink">Contact</a>
             </nav>
           </footer>

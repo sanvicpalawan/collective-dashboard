@@ -61,8 +61,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Skip session restore entirely on public pages — no cookie or token
     // will exist there, and attempting a refresh just generates a noisy 401.
     const path = window.location.pathname
-    const PUBLIC_EXACT = new Set(['/', '/home', '/docs', '/how-it-works'])
-    const PUBLIC_PREFIX = ['/auth/', '/docs/', '/how-it-works/']
+    const PUBLIC_EXACT = new Set(['/', '/home'])
+    const PUBLIC_PREFIX = ['/auth/']
     const isPublic = PUBLIC_EXACT.has(path) || PUBLIC_PREFIX.some(p => path.startsWith(p))
     if (isPublic) {
       setLoading(false)

@@ -21,10 +21,8 @@ const footerColumns = [
   {
     title: 'Product',
     links: [
-      { label: 'How it works', href: '/how-it-works' },
-      { label: 'Features', href: '/#foundation' },
-      { label: 'Guardrails', href: '/#guardrails' },
-      { label: 'Documentation', href: '/docs' },
+      { label: 'Sign in', href: '/auth/login' },
+      { label: 'Dashboard', href: '/app/dashboard' },
     ],
   },
   {

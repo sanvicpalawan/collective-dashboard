@@ -76,7 +76,7 @@ function HostMemberDashboard({ name, canDeploy }: { name?: string; canDeploy: bo
           </div>
           <div className="flex flex-shrink-0 flex-wrap gap-2">
             {canDeploy && <Link href="/app/cloud-setup" className="site-btn-primary">Open Cloud Setup <ArrowRight size={16} /></Link>}
-            <Link href="/docs" className={canDeploy ? 'site-btn-secondary' : 'site-btn-primary'}>Run it locally</Link>
+            <Link href="/app/ai-agent" className={canDeploy ? 'site-btn-secondary' : 'site-btn-primary'}>Open the AI agent</Link>
           </div>
         </div>
       </section>

@@ -20,7 +20,7 @@ export default function NotFound() {
           <p className="site-lede mt-5 max-w-md">The link may be old, or the page may have moved.</p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <Link href="/" className="site-btn-primary">Go to the homepage</Link>
-            <Link href="/docs" className="site-btn-secondary">Read the docs</Link>
+            <Link href="/auth/login" className="site-btn-secondary">Sign in</Link>
           </div>
         </div>
       </section>

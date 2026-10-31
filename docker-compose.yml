@@ -46,5 +46,29 @@ services:
     depends_on:
       - api
 
+  # Execution engine: polls agent_jobs and runs the business jobs the dashboard
+  # queues (lead generation, social media, …). Same image as the API, different
+  # command. Scale by running more replicas — claims use SKIP LOCKED.
+  agent-worker:
+    build:
+      context: ./python-backend
+    command: ["python", "/app/agent_worker/worker.py"]
+    volumes:
+      - ./backend/agent_worker:/app/agent_worker:ro
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:localpass@db:5432/ffinn
+      POLL_INTERVAL: "5"
+      JOB_MAX_ATTEMPTS: "3"
+      WORKER_LOG_LEVEL: INFO
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    # The image's healthcheck probes the API port, which this container does not serve.
+    healthcheck:
+      disable: true
+
 volumes:
   ffinn_pgdata:
