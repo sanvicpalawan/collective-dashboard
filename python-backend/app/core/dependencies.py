@@ -65,7 +65,20 @@ class CurrentUser:
 
 
 async def resolve_current_user(token: str | None, db: AsyncSession) -> CurrentUser:
-    """Decode JWT and validate against live DB state (stamp, roles, impersonation)."""
+    """Decode JWT and validate against live DB state (stamp, roles, impersonation).
+    When SKIP_AUTH is enabled (local dev mode), bypass token validation and
+    return a mock host admin so development isn't blocked by login."""
+    if getattr(settings, "skip_auth", False):
+        return CurrentUser(
+            id=uuid.UUID("00000000-0000-0000-0000-000000000001"),
+            email="dev@merqato.digital",
+            username="dev",
+            tenant_id=None,
+            roles=("Admin",),
+            permissions=("*",),
+            is_impersonating=False,
+            impersonator_id=None,
+        )
     if not token:
         raise UnauthorizedException()
     try:

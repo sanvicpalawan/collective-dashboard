@@ -29,6 +29,7 @@ services:
       DEFAULT_ADMIN_EMAIL: admin@localhost
       DEFAULT_ADMIN_PASSWORD: ChangeMe123!
       MULTI_TENANCY_ENABLED: "true"
+      SKIP_AUTH: "true"
     # Lets the API reach services on your machine, such as Ollama, on Linux too
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -60,6 +61,7 @@ services:
       POLL_INTERVAL: "5"
       JOB_MAX_ATTEMPTS: "3"
       WORKER_LOG_LEVEL: INFO
+      SKIP_AUTH: "true"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:

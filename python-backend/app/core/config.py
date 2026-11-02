@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     )
 
     # ── Application ──────────────────────────────────────────────────────────
-    app_name: str = "ffinn"
+    app_name: str = "MerQato Digital"
     app_version: str = "1.0.0"
     app_url: str = "http://localhost:3000"       # front-end / base URL for email links
     api_base_url: str = "http://localhost:8000"  # public API URL for CI callbacks
@@ -80,6 +80,7 @@ class Settings(BaseSettings):
         return [o.strip() for o in v.split(",") if o.strip()]
     environment: str = "development"
     debug: bool = False
+    skip_auth: bool = False  # Dev mode: bypass JWT auth when True
 
     # ── Database ─────────────────────────────────────────────────────────────
     database_url: str = "postgresql+asyncpg://postgres:localpass@localhost:5433/ffinn"
@@ -157,8 +158,8 @@ class Settings(BaseSettings):
     smtp_use_tls: bool = True
     smtp_username: str = ""
     smtp_password: str = ""
-    smtp_from_address: str = "noreply@ffinn.dev"
-    smtp_from_name: str = "ffinn"
+    smtp_from_address: str = "merqatodigital@proton.me"
+    smtp_from_name: str = "MerQato Digital"
 
     # ── OAuth ────────────────────────────────────────────────────────────────
     google_client_id: str = ""
